@@ -7,14 +7,15 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 from handlers import router
 import handlers
-from database import init_db
+from database import init_db  # async функция
 
 load_dotenv()
 TOKEN = getenv("BOT_TOKEN")
 
 
 async def main():
-    init_db()
+    # ✅ Инициализация базы данных нужно через await
+    await init_db()
 
     bot = Bot(token=TOKEN)
     handlers.bot = bot
@@ -27,5 +28,6 @@ async def main():
 
 
 if __name__ == "__main__":
-    init_db()
+    # ❌ Убрать обычный вызов init_db()
+    # init_db()
     asyncio.run(main())
