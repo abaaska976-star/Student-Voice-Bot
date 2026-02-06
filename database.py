@@ -1,6 +1,6 @@
 import sqlite3
-
-DB_NAME = "parliament_bot.db"
+import os
+DB_NAME = os.getenv("DB_NAME", "parliament_bot.db")
 
 def get_db():
     return sqlite3.connect(DB_NAME)
