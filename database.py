@@ -3,8 +3,8 @@ import sqlite3
 DB_NAME = "parliament_bot.db"
 
 def get_db():
-    """Возвращает соединение с базой данных."""
     return sqlite3.connect(DB_NAME)
+
 
 def init_db():
     """Инициализация базы данных и создание необходимых таблиц."""
