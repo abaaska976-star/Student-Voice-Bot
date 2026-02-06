@@ -1,6 +1,8 @@
 import sqlite3
 import os
-DB_NAME = os.getenv("DB_NAME", "parliament_bot.db")
+
+DB_NAME = os.getenv("DB_NAME", "/data/parliament_bot.db")  # <- важно для Choreo
+
 
 def get_db():
     return sqlite3.connect(DB_NAME)
