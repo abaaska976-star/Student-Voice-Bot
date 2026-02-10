@@ -1,52 +1,52 @@
-import asyncpg
-import os
+import sqlite3
 
-# Переменные окружения
-DB_HOST = os.getenv("DB_HOST")
-DB_NAME = os.getenv("DB_NAME")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_PORT = os.getenv("DB_PORT", "5432")
+DB_NAME = "parliament_bot.db"
 
-async def init_db():
-    conn = await asyncpg.connect(
-        host=DB_HOST,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        database=DB_NAME,
-        port=DB_PORT
-    )
+def get_db():
+    """Возвращает соединение с базой данных."""
+    return sqlite3.connect(DB_NAME)
 
-    # создаём таблицы
-    await conn.execute("""
+def init_db():
+    """Инициализация базы данных и создание необходимых таблиц."""
+    db = get_db()
+    cur = db.cursor()
+
+    # Таблица пользователей
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            tg_id BIGINT PRIMARY KEY,
+            tg_id INTEGER PRIMARY KEY,
             username TEXT,
             first_name TEXT
         )
     """)
-    await conn.execute("""
+
+    # Таблица сообщений
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS messages (
-            id SERIAL PRIMARY KEY,
-            user_id BIGINT,
-            group_message_id BIGINT
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            group_message_id INTEGER
         )
     """)
-    await conn.execute("""
+
+    # Таблица обращений
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS appeals (
-            id SERIAL PRIMARY KEY,
-            tg_id BIGINT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tg_id INTEGER,
             text TEXT,
             type TEXT
         )
     """)
-    await conn.execute("""
+
+    # Таблица заявок
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS applications (
-            id SERIAL PRIMARY KEY,
-            tg_id BIGINT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tg_id INTEGER,
             text TEXT
         )
     """)
 
-    await conn.close()
-    print("✅ PostgreSQL DB initialized")
+    db.commit()
+    db.close()

@@ -14,7 +14,7 @@ TOKEN = getenv("BOT_TOKEN")
 
 async def main():
     # ⚡ ВАЖНО: вызываем init_db с await
-    await init_db()  # ← таблицы создадутся в Supabase
+    init_db()  # ← таблицы создадутся в Supabase
 
     bot = Bot(token=TOKEN)
     dp = Dispatcher(storage=MemoryStorage())
