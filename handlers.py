@@ -4,19 +4,12 @@ from aiogram.filters import Command
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from database import get_db
-import uuid, os
-from dotenv import load_dotenv
+import uuid
 
 router = Router()
-bot: Bot = None  # будет инициализирован из main.py
-
-load_dotenv()  # загружает переменные из .env
-
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # теперь точно подхватит
-print("TOKEN =", BOT_TOKEN)  # временная проверка
-
+bot: Bot = None
 GROUP_ID = -4941840152
-ANTI_BULLYING_CHAT_ID = -5201762937
+ANTI_BULLYING_CHAT_ID = -1001234567890
 
 class Question(StatesGroup):
     waiting_text = State()

@@ -1,21 +1,13 @@
 import sqlite3
-import os
 
-DB_PATH = os.getenv("DB_PATH", "database.db")  # путь к файлу базы (можешь указать свой)
+DB_NAME = "parliament_bot.db"
 
 def get_db():
-    """
-    Возвращает соединение с базой данных SQLite.
-    Не забудь закрывать его после работы: db.close()
-    """
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row  # чтобы можно было обращаться к колонкам по имени
-    return conn
+    """Возвращает соединение с базой данных."""
+    return sqlite3.connect(DB_NAME)
 
 def init_db():
-    """
-    Инициализация базы данных: создаёт таблицы, если их нет
-    """
+    """Инициализация базы данных и создание необходимых таблиц."""
     db = get_db()
     cur = db.cursor()
 
@@ -28,28 +20,31 @@ def init_db():
         )
     """)
 
-    # Таблица сообщений (для связи сообщений бота и пользователя)
+    # Таблица сообщений
     cur.execute("""
         CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
             group_message_id INTEGER
         )
     """)
 
-    # Таблица заявок на участие в Парламент
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS applications (
-            tg_id INTEGER,
-            text TEXT
-        )
-    """)
-
-    # Таблица идей / feedback
+    # Таблица обращений
     cur.execute("""
         CREATE TABLE IF NOT EXISTS appeals (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             tg_id INTEGER,
             text TEXT,
             type TEXT
+        )
+    """)
+
+    # Таблица заявок
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tg_id INTEGER,
+            text TEXT
         )
     """)
 
