@@ -1,17 +1,22 @@
 import sqlite3
+import os
 
-DB_NAME = "parliament_bot.db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "parliament_bot.db")
+
+print("DB PATH:", DB_PATH)
 
 def get_db():
-    """Возвращает соединение с базой данных."""
-    return sqlite3.connect(DB_NAME)
+    return sqlite3.connect(
+        DB_PATH,
+        check_same_thread=False,
+        timeout=30
+    )
 
 def init_db():
-    """Инициализация базы данных и создание необходимых таблиц."""
     db = get_db()
     cur = db.cursor()
 
-    # Таблица пользователей
     cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             tg_id INTEGER PRIMARY KEY,
@@ -20,7 +25,6 @@ def init_db():
         )
     """)
 
-    # Таблица сообщений
     cur.execute("""
         CREATE TABLE IF NOT EXISTS messages (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,7 +33,6 @@ def init_db():
         )
     """)
 
-    # Таблица обращений
     cur.execute("""
         CREATE TABLE IF NOT EXISTS appeals (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,7 +42,6 @@ def init_db():
         )
     """)
 
-    # Таблица заявок
     cur.execute("""
         CREATE TABLE IF NOT EXISTS applications (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
