@@ -9,7 +9,7 @@ import uuid
 router = Router()
 bot: Bot = None
 GROUP_ID = -4941840152
-ANTI_BULLYING_CHAT_ID = -1001234567890
+ANTI_BULLYING_CHAT_ID = -5201762937
 
 class Question(StatesGroup):
     waiting_text = State()
